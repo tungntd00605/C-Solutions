@@ -1,0 +1,92 @@
+﻿<Page x:ConnectionId='1'
+    x:Class="UWP_Assignment.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWP_Assignment.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:entity="using:UWP_Assignment.Entity"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Pivot Background="{ThemeResource SystemControlChromeHighAcrylicElementMediumBrush}">
+            <Pivot.Title>
+                <Grid>
+                    <TextBlock Text="My Music Box" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+                </Grid>
+            </Pivot.Title>
+            <Pivot.RightHeader>
+                <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent">
+                    <AppBarButton x:ConnectionId='7' Icon="Add"                           />
+                    <AppBarSeparator/>
+                    <AppBarButton Icon="Contact">
+                        <AppBarButton.Flyout>
+                            <Flyout Placement="Bottom">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Hello "/>
+                                        <TextBlock x:ConnectionId='9'                         />
+                                    </StackPanel>
+                                    <Button x:ConnectionId='8' Content="Logout"                      />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarSeparator/>
+                </CommandBar>
+            </Pivot.RightHeader>
+            <PivotItem Header="Hot Songs">
+                <Grid>
+                    <ListView x:ConnectionId='10'                                              x:Name="MenuList" IsItemClickEnabled="True"                               >
+                        <ListView.ItemTemplate>
+                            <DataTemplate                         >
+                                <StackPanel x:ConnectionId='11' Padding="12" Orientation="Horizontal" Tag="{Binding}"                                          >
+                                    <Ellipse Height="77" Width="77">
+                                        <Ellipse.Fill>
+                                            <ImageBrush x:ConnectionId='14'                                 />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <StackPanel Margin="24,12,0,0">
+                                        <TextBlock x:ConnectionId='12'                      VerticalAlignment="Center" 
+                                               Style="{ThemeResource BaseTextBlockStyle}" 
+                                               Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
+                                                Margin="0,0,0,0"/>
+                                        <TextBlock x:ConnectionId='13'                        VerticalAlignment="Center"                                                
+                                               Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
+                                               Margin="0,7,0,0"/>
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="My Song">
+                <TextBlock Text="In Development" Style="{ThemeResource TitleTextBlockStyle}"/>
+            </PivotItem>
+        </Pivot>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+            <RelativePanel  HorizontalAlignment="Center">
+                <Slider x:ConnectionId='6' IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="800"></Slider>
+                <TextBlock RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignLeftWith="mySeekBar" Text="00:00:00"/>
+                <TextBlock RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignRightWith="mySeekBar" Text="00:00:00"/>
+            </RelativePanel>
+            <CommandBar HorizontalAlignment="Center" OverflowButtonVisibility="Collapsed">
+                <AppBarButton Icon="Shuffle"/>
+                <AppBarButton Icon="RepeatAll"/>
+                <AppBarSeparator/>
+                <AppBarButton x:ConnectionId='3' Icon="Previous"                        />
+                <AppBarButton x:ConnectionId='4' x:Name="playButton" Icon="Play"                    />
+                <AppBarButton x:ConnectionId='5' Icon="Next"                    />
+            </CommandBar>
+            <MediaPlayerElement x:ConnectionId='2' x:Name="myMediaPlayer"/>
+        </StackPanel>
+    </Grid>
+</Page>
+
