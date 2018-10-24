@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -12,6 +14,9 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,10 +35,13 @@ namespace UWP_Assignment.Views
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        private int playingList = 0; //0 = main list; 1 = my list...
         private ObservableCollection<Song> listSong;
-        
+        private ObservableCollection<Song> myListSong;
+
         internal ObservableCollection<Song> ListSong { get => listSong; set => listSong = value; }
-        internal string UserName = App.currentMember.lastName + " " + App.currentMember.firstName;
+        internal ObservableCollection<Song> MyListSong { get => myListSong; set => myListSong = value; }
+        internal string UserName = App.currentMember.firstName;
         MediaPlayer _mediaPlayer;
         MediaSource _mediaSource;
         MediaPlaybackItem _mediaPlaybackItem;
@@ -43,62 +51,26 @@ namespace UWP_Assignment.Views
         public HomePage()
         {
             this.InitializeComponent();
-
-            //API_Handle.Get_Lastest_Songs();
-            this.ListSong = new ObservableCollection<Song>();
-            this.ListSong.Add(new Song()
-            {
-                name = "Chưa bao giờ",
-                singer = "Hà Anh Tuấn",
-                thumbnail = "https://file.tinnhac.com/resize/600x-/music/2017/07/04/19554480101556946929-b89c.jpg",
-                link = "https://c1-ex-swe.nixcdn.com/NhacCuaTui963/ChuaBaoGioSEESINGSHARE2-HaAnhTuan-5111026.mp3"
-            });
-            this.ListSong.Add(new Song()
-            {
-                name = "Tình thôi xót xa",
-                singer = "Hà Anh Tuấn",
-                thumbnail = "https://i.ytimg.com/vi/XyjhXzsVdiI/maxresdefault.jpg",
-                link = "https://c1-ex-swe.nixcdn.com/NhacCuaTui963/TinhThoiXotXaSEESINGSHARE1-HaAnhTuan-4652191.mp3"
-            });
-            this.ListSong.Add(new Song()
-            {
-                name = "Tháng tư là tháng nói dối của em",
-                singer = "Hà Anh Tuấn",
-                thumbnail = "https://sky.vn/wp-content/uploads/2018/05/0-30.jpg",
-                link = "https://od.lk/s/NjFfMjM4MzQ1OThf/ThangTuLaLoiNoiDoiCuaEm-HaAnhTuan-4609544.mp3"
-            });
-            this.ListSong.Add(new Song()
-            {
-                name = "Nơi ấy bình yên",
-                singer = "Hà Anh Tuấn",
-                thumbnail = "https://i.ytimg.com/vi/A8u_fOetSQc/hqdefault.jpg",
-                link = "https://c1-ex-swe.nixcdn.com/NhacCuaTui946/NoiAyBinhYenSeeSingShare2-HaAnhTuan-5085337.mp3"
-            });
-            this.ListSong.Add(new Song()
-            {
-                name = "Giấc mơ chỉ là giấc mơ",
-                singer = "Hà Anh Tuấn",
-                thumbnail = "https://i.ytimg.com/vi/J_VuNwxSEi0/maxresdefault.jpg",
-                link = "https://c1-ex-swe.nixcdn.com/NhacCuaTui945/GiacMoChiLaGiacMoSeeSingShare2-HaAnhTuan-5082049.mp3"
-            });
-            this.ListSong.Add(new Song()
-            {
-                name = "Người tình mùa đông",
-                singer = "Hà Anh Tuấn",
-                thumbnail = "https://i.ytimg.com/vi/EXAmxBxpZEM/maxresdefault.jpg",
-                link = "https://c1-ex-swe.nixcdn.com/NhacCuaTui963/NguoiTinhMuaDongSEESINGSHARE2-HaAnhTuan-5104816.mp3"
-            });
+            this.ListSong = API_Handle.Get_Lastest_Songs().Result;
+            this.MyListSong = API_Handle.Get_My_Songs().Result;
 
             _mediaPlaybackList = new MediaPlaybackList();
             foreach (var Song in ListSong)
             {
                 _mediaSource = MediaSource.CreateFromUri(new Uri(Song.link));
                 _mediaPlaybackItem = new MediaPlaybackItem(_mediaSource);
+                var props = _mediaPlaybackItem.GetDisplayProperties();
+                props.Thumbnail = RandomAccessStreamReference.CreateFromUri(new Uri(Song.thumbnail));
+                props.Type = Windows.Media.MediaPlaybackType.Music;
+                props.MusicProperties.Title = Song.name;
+                props.MusicProperties.Artist = Song.singer;
+                _mediaPlaybackItem.ApplyDisplayProperties(props);
                 _mediaPlaybackList.Items.Add(_mediaPlaybackItem);
             }
             _mediaPlaybackList.CurrentItemChanged += _mediaPlaybackList_CurrentItemChanged;
             _mediaPlayer = new MediaPlayer();
             _mediaPlayer.AutoPlay = false;
+            volumeSlider.Value = _mediaPlayer.Volume*100;
             _mediaPlayer.Source = _mediaPlaybackList;
             myMediaPlayer.SetMediaPlayer(_mediaPlayer);
             _playBackSession = _mediaPlayer.PlaybackSession;
@@ -120,6 +92,9 @@ namespace UWP_Assignment.Views
                 App.isLogin = false;
                 App.currentMember = new Member();
                 Ultility.HideActiveContentDialog();
+                StorageFolder folder = ApplicationData.Current.LocalFolder;
+                StorageFile file = await folder.GetFileAsync("token.txt");
+                await file.DeleteAsync();
                 this.Frame.Navigate(typeof(Views.LoginForm));
             }            
         }
@@ -145,7 +120,7 @@ namespace UWP_Assignment.Views
 
         private void Next_Button(object sender, RoutedEventArgs e)
         {           
-            _mediaPlaybackList.MoveNext();                        
+            _mediaPlaybackList.MoveNext();
         }
         
         private void Previous_Button(object sender, RoutedEventArgs e)
@@ -155,15 +130,42 @@ namespace UWP_Assignment.Views
 
         private async void _mediaPlaybackList_CurrentItemChanged(MediaPlaybackList sender, CurrentMediaPlaybackItemChangedEventArgs args)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            if (playingList == 0)
             {
-                this.MenuList.SelectedIndex = (int)_mediaPlaybackList.CurrentItemIndex;
-            });
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    this.MenuList.SelectedIndex = (int)_mediaPlaybackList.CurrentItemIndex;
+                });                
+            }
+            else if (playingList == 1)
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    this.MySongList.SelectedIndex = (int)_mediaPlaybackList.CurrentItemIndex;
+                });                
+            }            
         }
 
         private void MenuList_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Debug.WriteLine(MenuList.Items.IndexOf(e.ClickedItem));
+        {            
+            if(playingList != 0)
+            {
+                _mediaPlaybackList = new MediaPlaybackList();
+                foreach (var Song in ListSong)
+                {
+                    _mediaSource = MediaSource.CreateFromUri(new Uri(Song.link));
+                    _mediaPlaybackItem = new MediaPlaybackItem(_mediaSource);
+                    var props = _mediaPlaybackItem.GetDisplayProperties();
+                    props.Thumbnail = RandomAccessStreamReference.CreateFromUri(new Uri(Song.thumbnail));
+                    props.Type = Windows.Media.MediaPlaybackType.Music;
+                    props.MusicProperties.Title = Song.name;
+                    props.MusicProperties.Artist = Song.singer;
+                    _mediaPlaybackItem.ApplyDisplayProperties(props);
+                    _mediaPlaybackList.Items.Add(_mediaPlaybackItem);
+                }
+                _mediaPlayer.Source = _mediaPlayer.Source = _mediaPlaybackList;                
+                playingList = 0;
+            }
             _mediaPlaybackList.MoveTo((uint)MenuList.Items.IndexOf(e.ClickedItem));
             if(_playBackSession.PlaybackState != MediaPlaybackState.Playing)
             {
@@ -171,5 +173,65 @@ namespace UWP_Assignment.Views
             }
             playButton.Icon = new SymbolIcon(Symbol.Pause);
         }
+
+        private void MySongList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (playingList != 1)
+            {
+                _mediaPlaybackList = new MediaPlaybackList();
+                foreach (var Song in MyListSong)
+                {
+                    _mediaSource = MediaSource.CreateFromUri(new Uri(Song.link));
+                    _mediaPlaybackItem = new MediaPlaybackItem(_mediaSource);
+                    var props = _mediaPlaybackItem.GetDisplayProperties();
+                    props.Thumbnail = RandomAccessStreamReference.CreateFromUri(new Uri(Song.thumbnail));
+                    props.Type = Windows.Media.MediaPlaybackType.Music;
+                    props.MusicProperties.Title = Song.name;
+                    props.MusicProperties.Artist = Song.singer;
+                    _mediaPlaybackItem.ApplyDisplayProperties(props);
+                    _mediaPlaybackList.Items.Add(_mediaPlaybackItem);
+                }
+                _mediaPlayer.Source = _mediaPlayer.Source = _mediaPlaybackList;                
+                playingList = 1;
+            }
+            _mediaPlaybackList.MoveTo((uint)MySongList.Items.IndexOf(e.ClickedItem));
+            if (_playBackSession.PlaybackState != MediaPlaybackState.Playing)
+            {
+                _mediaPlayer.Play();
+            }
+            playButton.Icon = new SymbolIcon(Symbol.Pause);
+        }
+
+        private void Shuffle_Button(object sender, RoutedEventArgs e)
+        {
+            _mediaPlaybackList.ShuffleEnabled = !_mediaPlaybackList.ShuffleEnabled;            
+        }
+
+        private void Auto_Repeat_Button(object sender, RoutedEventArgs e)
+        {
+            _mediaPlaybackList.AutoRepeatEnabled = !_mediaPlaybackList.AutoRepeatEnabled;
+        }
+
+        private void volumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Slider slider = sender as Slider;
+            if (slider != null)
+            {
+                _mediaPlayer.Volume = slider.Value/100;
+            }
+        }
+
+        private async void Refresh_List_Button(object sender, RoutedEventArgs e)
+        {
+            var notifyDialog = new ContentDialog
+            {
+                Title = "In Development",
+                Content = "Sorry this function is currently in development",
+                CloseButtonText = "Ok"
+            };
+
+            ContentDialogResult result = await notifyDialog.ShowAsync();
+        }
+        
     }
 }

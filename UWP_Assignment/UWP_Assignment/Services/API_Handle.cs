@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -19,6 +20,7 @@ namespace UWP_Assignment.Services
         private static string API_REGISTER = "http://1-dot-backup-server-002.appspot.com/_api/v2/members";
         private static string API_LOGIN = "http://2-dot-backup-server-002.appspot.com/_api/v2/members/authentication";
         private static string SONG_API_URL = "https://2-dot-backup-server-002.appspot.com/_api/v2/songs";
+        private static string MY_SONG_URL = "https://2-dot-backup-server-002.appspot.com/_api/v2/songs/get-mine";
         private static string API_INFO = "http://2-dot-backup-server-002.appspot.com/_api/v2/members/information";
 
         public static async Task<string> Sign_Up(Member member)
@@ -37,7 +39,6 @@ namespace UWP_Assignment.Services
             HttpClient client2 = new HttpClient();
             client2.DefaultRequestHeaders.Add("Authorization", "Basic " + App.token.token);
             var resp = client2.GetAsync(API_INFO).Result;
-            
             return resp;
         }
         
@@ -128,14 +129,23 @@ namespace UWP_Assignment.Services
             return contents;
         }
 
-        public static HttpResponseMessage Get_Lastest_Songs() { 
+        public async static Task<ObservableCollection<Song>> Get_Lastest_Songs() { 
             HttpClient httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + App.token.token);
             var response = httpClient.GetAsync(SONG_API_URL).Result;
-            //var json = response.Content.ReadAsStringAsync().ToString();
-            //var array = JsonConverter.
-            //Debug.WriteLine(JsonConvert.DeserializeObject<Song>(json));
-            return response;
+            var arraysong = await response.Content.ReadAsStringAsync();
+            var ListSong = JsonConvert.DeserializeObject<ObservableCollection<Song>>(arraysong.ToString());
+            return ListSong;
+        }
+
+        public async static Task<ObservableCollection<Song>> Get_My_Songs()
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + App.token.token);
+            var response = httpClient.GetAsync(MY_SONG_URL).Result;
+            var arraysong = await response.Content.ReadAsStringAsync();
+            var ListSong = JsonConvert.DeserializeObject<ObservableCollection<Song>>(arraysong.ToString());
+            return ListSong;
         }
     }
 }

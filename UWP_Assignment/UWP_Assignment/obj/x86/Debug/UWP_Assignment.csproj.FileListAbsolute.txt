@@ -343,3 +343,4 @@ C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\obj\x86\Debug\Micros
 C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\obj\x86\Debug\Microsoft.Xaml.Interactions.pri.xml
 C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\obj\x86\Debug\Microsoft.Xaml.Interactivity.pri.xml
 C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\obj\x86\Debug\ProjectArchitectures.txt
+C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\obj\x86\Debug\UWP_Assignment.csprojAssemblyReference.cache

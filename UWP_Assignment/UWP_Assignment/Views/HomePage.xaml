@@ -14,7 +14,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Pivot Background="{ThemeResource SystemControlChromeHighAcrylicElementMediumBrush}">
+        <Pivot x:Name="myPivot" Background="{ThemeResource SystemControlChromeHighAcrylicElementMediumBrush}">
             <Pivot.Title>
                 <Grid>
                     <TextBlock Text="My Music Box" Style="{ThemeResource SubheaderTextBlockStyle}"/>
@@ -22,8 +22,17 @@
             </Pivot.Title>
             <Pivot.RightHeader>
                 <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent">
-                    <AppBarButton Icon="Add" Click="AppBarButton_Click"/>
                     <AppBarSeparator/>
+                    <AppBarButton Icon="Add" Click="AppBarButton_Click"/>
+                    <AppBarButton Icon="Setting">
+                        <AppBarButton.Flyout>
+                            <Flyout Placement="Bottom">
+                                <StackPanel>
+                                    <Button HorizontalAlignment="Right" Content="Refresh current list" Click="Refresh_List_Button" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
                     <AppBarButton Icon="Contact">
                         <AppBarButton.Flyout>
                             <Flyout Placement="Bottom">
@@ -68,22 +77,54 @@
                 </Grid>
             </PivotItem>
             <PivotItem Header="My Song">
-                <TextBlock Text="In Development" Style="{ThemeResource TitleTextBlockStyle}"/>
+                <Grid>
+                    <ListView ItemsSource="{x:Bind MyListSong, Mode=TwoWay}" x:Name="MySongList" IsItemClickEnabled="True" ItemClick="MySongList_ItemClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="entity:Song">
+                                <StackPanel Padding="12" Orientation="Horizontal" Tag="{Binding}" AutomationProperties.Name="{x:Bind name}">
+                                    <Ellipse Height="77" Width="77">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{x:Bind thumbnail}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <StackPanel Margin="24,12,0,0">
+                                        <TextBlock Text="{x:Bind name}" VerticalAlignment="Center" 
+                                               Style="{ThemeResource BaseTextBlockStyle}" 
+                                               Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
+                                                Margin="0,0,0,0"/>
+                                        <TextBlock Text="{x:Bind singer}" VerticalAlignment="Center"                                                
+                                               Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
+                                               Margin="0,7,0,0"/>
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </PivotItem>
         </Pivot>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center">
             <RelativePanel  HorizontalAlignment="Center">
-                <Slider IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="800"></Slider>
+                <Slider IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="1494" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
                 <TextBlock RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignLeftWith="mySeekBar" Text="00:00:00"/>
                 <TextBlock RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignRightWith="mySeekBar" Text="00:00:00"/>
             </RelativePanel>
-            <CommandBar HorizontalAlignment="Center" OverflowButtonVisibility="Collapsed">
-                <AppBarButton Icon="Shuffle"/>
-                <AppBarButton Icon="RepeatAll"/>
+            <CommandBar HorizontalAlignment="Center" CanDrag="True" OverflowButtonVisibility="Collapsed">
+                <AppBarToggleButton ToolTipService.ToolTip="Shuffle" x:Name="shuffleButton" Icon="Shuffle" Click="Shuffle_Button"/>
+                <AppBarToggleButton ToolTipService.ToolTip="Auto Repeat" x:Name="autoRepeatButton" Icon="RepeatAll" Click="Auto_Repeat_Button"/>
                 <AppBarSeparator/>
-                <AppBarButton Icon="Previous" Click="Previous_Button"/>
-                <AppBarButton x:Name="playButton" Icon="Play" Click="Play_Button"/>
-                <AppBarButton Icon="Next" Click="Next_Button"/>
+                <AppBarButton ToolTipService.ToolTip="Previous" Icon="Previous" Click="Previous_Button"/>
+                <AppBarButton ToolTipService.ToolTip="Play/Pause" x:Name="playButton" Icon="Play" Click="Play_Button"/>
+                <AppBarButton ToolTipService.ToolTip="Next" Icon="Next" Click="Next_Button"/>
+                <AppBarSeparator/>
+                <AppBarButton Icon="Volume">
+                    <AppBarButton.Flyout>
+                        <Flyout Placement="Right">
+                            <Slider x:Name="volumeSlider" Height="23" Width="150" ValueChanged="volumeSlider_ValueChanged"/>
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
             </CommandBar>
             <MediaPlayerElement x:Name="myMediaPlayer"/>
         </StackPanel>
