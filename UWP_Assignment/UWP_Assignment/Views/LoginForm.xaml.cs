@@ -46,6 +46,10 @@ namespace UWP_Assignment.Views
                 LoginInfor.Add("email", Email.Text);
                 LoginInfor.Add("password", Password.Password);
                 await API_Handle.Login(LoginInfor);
+                if(App.isLogin == true)
+                {
+                    this.Frame.Navigate(typeof(Views.HomePage));
+                }
             }
             else
             {

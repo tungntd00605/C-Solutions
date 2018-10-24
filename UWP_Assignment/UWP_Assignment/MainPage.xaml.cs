@@ -39,7 +39,12 @@ namespace UWP_Assignment
         private async void AutoLogin()
         {
             StorageFolder folder = ApplicationData.Current.LocalFolder;
-            StorageFile file = await folder.GetFileAsync("token.txt");
+            StorageFile file = (StorageFile) await folder.TryGetItemAsync("token.txt");
+            if(file == null)
+            {
+                MainFrame.Navigate(typeof(Views.LoginForm));
+                return;
+            }
             string token = await Windows.Storage.FileIO.ReadTextAsync(file);
             App.token = JsonConvert.DeserializeObject<TokenResponse>(token);
             HttpResponseMessage response = await API_Handle.Get_Information();

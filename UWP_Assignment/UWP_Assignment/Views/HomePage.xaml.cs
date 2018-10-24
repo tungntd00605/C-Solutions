@@ -41,7 +41,7 @@ namespace UWP_Assignment.Views
 
         internal ObservableCollection<Song> ListSong { get => listSong; set => listSong = value; }
         internal ObservableCollection<Song> MyListSong { get => myListSong; set => myListSong = value; }
-        internal string UserName = App.currentMember.firstName;
+        internal string UserName = " " + App.currentMember.firstName;
         MediaPlayer _mediaPlayer;
         MediaSource _mediaSource;
         MediaPlaybackItem _mediaPlaybackItem;
@@ -74,7 +74,33 @@ namespace UWP_Assignment.Views
             _mediaPlayer.Source = _mediaPlaybackList;
             myMediaPlayer.SetMediaPlayer(_mediaPlayer);
             _playBackSession = _mediaPlayer.PlaybackSession;
+
+            // add event for auto update seekbar
+            _playBackSession.PositionChanged += MediaPlaybackSession_PositionChanged;
+            _playBackSession.PlaybackStateChanged += MediaPlaybackSession_PlaybackStateChanged;
+
         }
+
+        // Update seekbar max value when change song
+        private async void MediaPlaybackSession_PlaybackStateChanged(MediaPlaybackSession sender, object args)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                mySeekBar.Maximum = _playBackSession.NaturalDuration.TotalSeconds;
+            });
+        }
+
+        // Auto update seekbar position
+        private async void MediaPlaybackSession_PositionChanged(MediaPlaybackSession sender, object args)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {                
+                mySeekBar.Value = _playBackSession.Position.TotalSeconds;
+                MaxDuration.Text = _playBackSession.NaturalDuration.Subtract(_playBackSession.Position).ToString(@"mm\:ss");
+                MinDuration.Text = _playBackSession.Position.ToString(@"mm\:ss");
+            });
+        }
+
 
         private async void Handle_Logout(object sender, RoutedEventArgs e)
         {
@@ -94,6 +120,7 @@ namespace UWP_Assignment.Views
                 Ultility.HideActiveContentDialog();
                 StorageFolder folder = ApplicationData.Current.LocalFolder;
                 StorageFile file = await folder.GetFileAsync("token.txt");
+                _mediaPlayer.Pause() ;
                 await file.DeleteAsync();
                 this.Frame.Navigate(typeof(Views.LoginForm));
             }            
@@ -232,6 +259,5 @@ namespace UWP_Assignment.Views
 
             ContentDialogResult result = await notifyDialog.ShowAsync();
         }
-        
     }
 }

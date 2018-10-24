@@ -23,12 +23,12 @@
             <Pivot.RightHeader>
                 <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent">
                     <AppBarSeparator/>
-                    <AppBarButton x:ConnectionId='11' Icon="Add"                           />
+                    <AppBarButton x:ConnectionId='13' Icon="Add"                           />
                     <AppBarButton Icon="Setting">
                         <AppBarButton.Flyout>
                             <Flyout Placement="Bottom">
                                 <StackPanel>
-                                    <Button x:ConnectionId='14' HorizontalAlignment="Right" Content="Refresh current list"                             />
+                                    <Button x:ConnectionId='16' HorizontalAlignment="Right" Content="Refresh current list"                             />
                                 </StackPanel>
                             </Flyout>
                         </AppBarButton.Flyout>
@@ -39,9 +39,9 @@
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Hello "/>
-                                        <TextBlock x:ConnectionId='13'                         />
+                                        <TextBlock x:ConnectionId='15'                         />
                                     </StackPanel>
-                                    <Button x:ConnectionId='12' Content="Logout"                      />
+                                    <Button x:ConnectionId='14' Content="Logout"                      />
                                 </StackPanel>
                             </Flyout>
                         </AppBarButton.Flyout>
@@ -51,21 +51,21 @@
             </Pivot.RightHeader>
             <PivotItem Header="Hot Songs">
                 <Grid>
-                    <ListView x:ConnectionId='20'                                              x:Name="MenuList" IsItemClickEnabled="True"                               >
+                    <ListView x:ConnectionId='22'                                              x:Name="MenuList" IsItemClickEnabled="True"                               >
                         <ListView.ItemTemplate>
                             <DataTemplate                         >
-                                <StackPanel x:ConnectionId='21' Padding="12" Orientation="Horizontal" Tag="{Binding}"                                          >
+                                <StackPanel x:ConnectionId='23' Padding="12" Orientation="Horizontal" Tag="{Binding}"                                          >
                                     <Ellipse Height="77" Width="77">
                                         <Ellipse.Fill>
-                                            <ImageBrush x:ConnectionId='24'                                 />
+                                            <ImageBrush x:ConnectionId='26'                                 />
                                         </Ellipse.Fill>
                                     </Ellipse>
                                     <StackPanel Margin="24,12,0,0">
-                                        <TextBlock x:ConnectionId='22'                      VerticalAlignment="Center" 
+                                        <TextBlock x:ConnectionId='24'                      VerticalAlignment="Center" 
                                                Style="{ThemeResource BaseTextBlockStyle}" 
                                                Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
                                                 Margin="0,0,0,0"/>
-                                        <TextBlock x:ConnectionId='23'                        VerticalAlignment="Center"                                                
+                                        <TextBlock x:ConnectionId='25'                        VerticalAlignment="Center"                                                
                                                Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
                                                Margin="0,7,0,0"/>
                                     </StackPanel>
@@ -78,21 +78,21 @@
             </PivotItem>
             <PivotItem Header="My Song">
                 <Grid>
-                    <ListView x:ConnectionId='15'                                                x:Name="MySongList" IsItemClickEnabled="True"                                 >
+                    <ListView x:ConnectionId='17'                                                x:Name="MySongList" IsItemClickEnabled="True"                                 >
                         <ListView.ItemTemplate>
                             <DataTemplate                         >
-                                <StackPanel x:ConnectionId='16' Padding="12" Orientation="Horizontal" Tag="{Binding}"                                          >
+                                <StackPanel x:ConnectionId='18' Padding="12" Orientation="Horizontal" Tag="{Binding}"                                          >
                                     <Ellipse Height="77" Width="77">
                                         <Ellipse.Fill>
-                                            <ImageBrush x:ConnectionId='19'                                 />
+                                            <ImageBrush x:ConnectionId='21'                                 />
                                         </Ellipse.Fill>
                                     </Ellipse>
                                     <StackPanel Margin="24,12,0,0">
-                                        <TextBlock x:ConnectionId='17'                      VerticalAlignment="Center" 
+                                        <TextBlock x:ConnectionId='19'                      VerticalAlignment="Center" 
                                                Style="{ThemeResource BaseTextBlockStyle}" 
                                                Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
                                                 Margin="0,0,0,0"/>
-                                        <TextBlock x:ConnectionId='18'                        VerticalAlignment="Center"                                                
+                                        <TextBlock x:ConnectionId='20'                        VerticalAlignment="Center"                                                
                                                Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
                                                Margin="0,7,0,0"/>
                                     </StackPanel>
@@ -106,9 +106,9 @@
         </Pivot>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center">
             <RelativePanel  HorizontalAlignment="Center">
-                <Slider x:ConnectionId='10' IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="1494" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
-                <TextBlock RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignLeftWith="mySeekBar" Text="00:00:00"/>
-                <TextBlock RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignRightWith="mySeekBar" Text="00:00:00"/>
+                <Slider x:ConnectionId='10' IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="1494" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"                                                    />
+                <TextBlock x:ConnectionId='11' x:Name="MinDuration" RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignLeftWith="mySeekBar" Text="00:00"/>
+                <TextBlock x:ConnectionId='12' x:Name="MaxDuration" RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignRightWith="mySeekBar" Text="00:00"/>
             </RelativePanel>
             <CommandBar HorizontalAlignment="Center" CanDrag="True" OverflowButtonVisibility="Collapsed">
                 <AppBarToggleButton x:ConnectionId='4' ToolTipService.ToolTip="Shuffle" x:Name="shuffleButton" Icon="Shuffle"                       />
