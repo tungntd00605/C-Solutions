@@ -97,7 +97,7 @@ namespace UWP_Assignment.Services
             httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + App.token.token);
             var content = new StringContent(JsonConvert.SerializeObject(song), System.Text.Encoding.UTF8, "application/json");
             var response = httpClient.PostAsync(SONG_API_URL, content).Result;
-            
+            var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == System.Net.HttpStatusCode.Created)
             {
                 Ultility.HideActiveContentDialog();
@@ -114,15 +114,39 @@ namespace UWP_Assignment.Services
             else
             {
                 Ultility.HideActiveContentDialog();
-                // Sample error message
-                ContentDialog errorDiaglog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = "Nothing added! Please try again later",
-                    CloseButtonText = "Ok"
-                };
 
-                ContentDialogResult result = await errorDiaglog.ShowAsync();
+                ErrorResponse errorObject = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+                Debug.WriteLine("Message: " + errorObject.message);
+
+                if (errorObject != null && errorObject.error.Count > 0)
+                {
+                    var textMessage = errorObject.message;
+                    StringBuilder textErrors = new StringBuilder();
+
+                    foreach (var key in errorObject.error.Keys)
+                    {
+                        string textError = errorObject.error[key] + "\n";
+                        textErrors.Append(textError);
+                    }
+
+                    ContentDialog errorDiaglog = new ContentDialog
+                    {
+                        Title = textMessage,
+                        Content = textErrors,
+                        CloseButtonText = "Ok"
+                    };
+
+                    ContentDialogResult result = await errorDiaglog.ShowAsync();
+                }
+                // Sample error message
+                //ContentDialog errorDiaglog = new ContentDialog
+                //{
+                //    Title = "Error",
+                //    Content = "Nothing added! Please try again later",
+                //    CloseButtonText = "Ok"
+                //};
+
+                //ContentDialogResult result = await errorDiaglog.ShowAsync();
             }
             var contents = await response.Content.ReadAsStringAsync();
             Debug.WriteLine(contents);

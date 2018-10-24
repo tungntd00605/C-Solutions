@@ -96,7 +96,6 @@
                                                Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}" 
                                                Margin="0,7,0,0"/>
                                     </StackPanel>
-
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -106,7 +105,7 @@
         </Pivot>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center">
             <RelativePanel  HorizontalAlignment="Center">
-                <Slider x:ConnectionId='10' IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="1494" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"                                                    />
+                <Slider x:ConnectionId='10' IsThumbToolTipEnabled="False" x:Name="mySeekBar" Width="1494" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
                 <TextBlock x:ConnectionId='11' x:Name="MinDuration" RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignLeftWith="mySeekBar" Text="00:00"/>
                 <TextBlock x:ConnectionId='12' x:Name="MaxDuration" RelativePanel.AlignBottomWith="mySeekBar" RelativePanel.AlignRightWith="mySeekBar" Text="00:00"/>
             </RelativePanel>
