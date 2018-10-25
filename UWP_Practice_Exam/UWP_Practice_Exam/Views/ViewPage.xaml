@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <ComboBox ItemsSource="{x:Bind myListFile}" x:Name="myComboBox" Margin="0,0,0,20" Width="200" HorizontalAlignment="Left" Header="Current Files">
+        <ComboBox ItemsSource="{x:Bind myListFile, Mode=TwoWay}" x:Name="myComboBox" Margin="0,0,0,20" Width="200" HorizontalAlignment="Left" Header="Current Files" SelectionChanged="myComboBox_SelectionChanged">
         </ComboBox>
         <TextBox x:Name="myContent" Header="File Content" Width="400" Height="100"/>
     </StackPanel>

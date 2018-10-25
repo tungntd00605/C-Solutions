@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -24,7 +25,7 @@ namespace UWP_Practice_Exam.Views
     /// </summary>
     public sealed partial class ViewPage : Page
     {
-        ObservableCollection<File> myListFile = new ObservableCollection<File>();
+        ObservableCollection<string> myListFile = new ObservableCollection<string>();
         IReadOnlyList<StorageFile> listFile;
         public ViewPage()
         {
@@ -38,16 +39,22 @@ namespace UWP_Practice_Exam.Views
             listFile = await storageFolder.GetFilesAsync();
             foreach (StorageFile file in listFile)
             {
-                File newFile = new File();
-                newFile.name = file.Name;
-                newFile.content = await Windows.Storage.FileIO.ReadTextAsync(file);
-                myListFile.Add(newFile);
+                myListFile.Add(file.Name);
             }
         }
 
-        private void myComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public async Task<string> Get_File_Content(string fileName)
         {
-            
+            StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var currentFile  = await storageFolder.GetFileAsync(fileName);
+            string content = await Windows.Storage.FileIO.ReadTextAsync(currentFile);
+            return content;
+        }
+
+        private async void myComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = sender as ComboBox;
+            myContent.Text = Get_File_Content(box.SelectedValue.ToString());
         }
     }
 }
