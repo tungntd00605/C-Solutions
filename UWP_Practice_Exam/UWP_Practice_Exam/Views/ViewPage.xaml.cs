@@ -54,7 +54,7 @@ namespace UWP_Practice_Exam.Views
         private async void myComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = sender as ComboBox;
-            myContent.Text = Get_File_Content(box.SelectedValue.ToString());
+            myContent.Text = await Get_File_Content(box.SelectedValue.ToString());
         }
     }
 }
