@@ -32,8 +32,7 @@ namespace UWP_Assignment
         public MainPage()
         {
             this.InitializeComponent();
-            AutoLogin();
-            
+            AutoLogin();           
         }
 
         private async void AutoLogin()

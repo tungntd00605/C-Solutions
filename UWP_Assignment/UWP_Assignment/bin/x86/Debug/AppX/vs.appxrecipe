@@ -31,13 +31,13 @@
     <AppXManifest Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-10-24T17:39:18.035</Modified>
+      <Modified>2018-10-25T20:32:43.499</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\UWP_Assignment.exe">
       <PackagePath>entrypoint\UWP_Assignment.exe</PackagePath>
-      <Modified>2018-10-24T17:39:16.967</Modified>
+      <Modified>2018-10-25T20:32:41.912</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\.nuget\packages\colorcode.core\2.0.5\lib\netstandard1.4\ColorCode.Core.dll">
       <PackagePath>ColorCode.Core.dll</PackagePath>
@@ -799,31 +799,31 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\UWP_Assignment.xr.xml">
       <PackagePath>UWP_Assignment.xr.xml</PackagePath>
-      <Modified>2018-10-24T17:39:16.665</Modified>
+      <Modified>2018-10-25T20:11:29.335</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2018-10-24T17:39:16.725</Modified>
+      <Modified>2018-10-25T20:32:41.459</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\Diaglog\AddSongForm.xbf">
       <PackagePath>Diaglog\AddSongForm.xbf</PackagePath>
-      <Modified>2018-10-24T17:39:16.725</Modified>
+      <Modified>2018-10-25T20:32:41.464</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2018-10-24T17:39:16.726</Modified>
+      <Modified>2018-10-25T20:32:41.464</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\Views\HomePage.xbf">
       <PackagePath>Views\HomePage.xbf</PackagePath>
-      <Modified>2018-10-24T17:39:16.727</Modified>
+      <Modified>2018-10-25T20:32:41.465</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\Views\LoginForm.xbf">
       <PackagePath>Views\LoginForm.xbf</PackagePath>
-      <Modified>2018-10-24T17:39:16.727</Modified>
+      <Modified>2018-10-25T20:32:41.465</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\Views\RegisterForm.xbf">
       <PackagePath>Views\RegisterForm.xbf</PackagePath>
-      <Modified>2018-10-24T17:39:16.728</Modified>
+      <Modified>2018-10-25T20:32:41.466</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.17134.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -1012,7 +1012,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\HP ENVY\source\repos\UWP_Assignment\UWP_Assignment\bin\x86\Debug\Core\UWP_Assignment.exe">
       <PackagePath>UWP_Assignment.exe</PackagePath>
-      <Modified>2018-10-24T17:39:18.026</Modified>
+      <Modified>2018-10-25T20:32:43.487</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

@@ -47,17 +47,18 @@ namespace UWP_Assignment.Views
         MediaPlaybackItem _mediaPlaybackItem;
         MediaPlaybackList _mediaPlaybackList;
         MediaPlaybackSession _playBackSession;
+        private bool isSeeking = false;
 
         public HomePage()
         {
             this.InitializeComponent();
             this.ListSong = API_Handle.Get_Lastest_Songs().Result;
             this.MyListSong = API_Handle.Get_My_Songs().Result;
-
+            
             _mediaPlaybackList = new MediaPlaybackList();
             foreach (var Song in ListSong)
             {
-                _mediaSource = MediaSource.CreateFromUri(new Uri(Song.link));
+                _mediaSource = MediaSource.  CreateFromUri(new Uri(Song.link));
                 _mediaPlaybackItem = new MediaPlaybackItem(_mediaSource);
                 var props = _mediaPlaybackItem.GetDisplayProperties();
                 props.Thumbnail = RandomAccessStreamReference.CreateFromUri(new Uri(Song.thumbnail));
@@ -79,6 +80,21 @@ namespace UWP_Assignment.Views
             _playBackSession.PositionChanged += MediaPlaybackSession_PositionChanged;
             _playBackSession.PlaybackStateChanged += MediaPlaybackSession_PlaybackStateChanged;
 
+            mySeekBar.AddHandler(Thumb.PointerPressedEvent, new PointerEventHandler(ThumbPressed), true);
+            mySeekBar.AddHandler(Thumb.PointerReleasedEvent, new PointerEventHandler(ThumbReleased), true);
+        }
+         
+        // pressed and released event for seekbar slider
+        private void ThumbReleased(object sender, PointerRoutedEventArgs e)
+        {
+            Slider slider = sender as Slider;            
+            _playBackSession.Position = TimeSpan.FromSeconds(slider.Value);
+            isSeeking = false;
+        }
+
+        private void ThumbPressed(object sender, PointerRoutedEventArgs e)
+        {
+            isSeeking = true;            
         }
 
         // Update seekbar max value when change song
@@ -94,10 +110,12 @@ namespace UWP_Assignment.Views
         private async void MediaPlaybackSession_PositionChanged(MediaPlaybackSession sender, object args)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {                
-                mySeekBar.Value = _playBackSession.Position.TotalSeconds;
-                MaxDuration.Text = _playBackSession.NaturalDuration.Subtract(_playBackSession.Position).ToString(@"mm\:ss");
-                MinDuration.Text = _playBackSession.Position.ToString(@"mm\:ss");
+            {
+                if (!isSeeking) {
+                    mySeekBar.Value = _playBackSession.Position.TotalSeconds;
+                    MaxDuration.Text = _playBackSession.NaturalDuration.Subtract(_playBackSession.Position).ToString(@"mm\:ss");
+                    MinDuration.Text = _playBackSession.Position.ToString(@"mm\:ss");
+                }                
             });
         }
 
@@ -258,6 +276,7 @@ namespace UWP_Assignment.Views
             };
 
             ContentDialogResult result = await notifyDialog.ShowAsync();
-        }
+        }        
+        
     }
 }
