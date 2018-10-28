@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+<form action="/student/store" method="post">
+    <div>
+        <text>Roll Number</text><input id="" type="text" name="RollNumber" value="" />
+    </div>
+    <div>
+        <text>Name</text><input type="text" name="Name" value="" />
+    </div>
+    <input type="submit" name="submitBtn" value="Submit" />
+    <div>
+        <input type="text" name="updateId" />
+        <input type="button" name="updateBtn" value="Update" />
+        <input type="button" name="deleteBtn" value="Delete" />
+    </div>
+</form>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[name="updateBtn"]').click(function () {
+            var updateID = $('[name="updateId"]').val();            
+            $.ajax({
+                url: '/student/' + updateID,
+                type: 'PUT',
+                data: $('form').serialize(),
+                success: function (data) {
+                    alert("success");
+                },
+                error: function (data) {
+                    alert("failed");
+                }
+            });
+        });
+
+        $('[name="deleteBtn"]').click(function () {
+            var updateID = $('[name="updateId"]').val();            
+            $.ajax({
+                url: '/student/' + updateID,
+                type: 'DELETE',
+                success: function (data) {
+                    alert("success");
+                },
+                error: function (data) {
+                    alert("failed");
+                }
+            });
+        });
+    });
+</script>
