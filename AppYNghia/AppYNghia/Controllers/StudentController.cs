@@ -45,7 +45,15 @@ namespace AppYNghia.Controllers
         [HttpPut("/student/{id:int}")]  
         public IActionResult Update(long id, Student student)
         {
-            _context.Students.Update(student);
+            var oldStudent = _context.Students.Find(id);
+            if (oldStudent == null)
+            {
+                return NotFound();
+            }
+
+            oldStudent.Name = student.Name;
+            oldStudent.RollNumber = student.RollNumber;
+            _context.Students.Update(oldStudent);
             _context.SaveChanges();
             return new JsonResult(_context.Students.Find(id));
         }
@@ -54,6 +62,10 @@ namespace AppYNghia.Controllers
         public IActionResult Delete(long id)
         {
             var removeStudent = _context.Students.Find(id);
+            if (removeStudent == null)
+            {
+                return NotFound();
+            }
             _context.Students.Remove(removeStudent);
             _context.SaveChanges();
             return new JsonResult(_context.Students.Find(id));
